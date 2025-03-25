@@ -12,7 +12,7 @@ if (started) {
 
 // Additional imports
 import { ipcMain, dialog } from 'electron';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url';
 import chokidar, { FSWatcher } from 'chokidar';
 import os from 'os';
 
