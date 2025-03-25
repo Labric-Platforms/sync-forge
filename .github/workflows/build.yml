@@ -1,4 +1,14 @@
 name: Release app
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+# on:
+#   push:
+#     tags:
+#       - 'v*'
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
