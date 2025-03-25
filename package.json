@@ -1,8 +1,8 @@
 {
   "name": "labric-sync-new",
-  "productName": "labric-sync-new",
+  "productName": "Sync Forge",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "File Syncing Application",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -26,6 +26,7 @@
     "@electron-forge/plugin-auto-unpack-natives": "^7.8.0",
     "@electron-forge/plugin-fuses": "^7.8.0",
     "@electron-forge/plugin-vite": "^7.8.0",
+    "@electron-forge/publisher-github": "^7.8.0",
     "@electron/fuses": "^1.8.0",
     "@types/chokidar": "^1.7.5",
     "@types/electron-squirrel-startup": "^1.0.2",
