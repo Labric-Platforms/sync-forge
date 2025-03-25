@@ -1,5 +1,8 @@
 {
   "name": "labric-sync-new",
+  "packagerConfig": {
+    "executableName": "sync-forge"
+  },
   "productName": "Sync Forge",
   "version": "1.0.0",
   "description": "File Syncing Application",
