@@ -20,7 +20,7 @@ const config: ForgeConfig = {
     new MakerRpm({}),
     new MakerDeb({
       options: {
-        icon: "./src/assets/icons/icon",
+        icon: "./src/assets/icons/icon.png",
       }
     }),
   ],
