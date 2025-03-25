@@ -1,8 +1,8 @@
 {
   "name": "labric-sync-new",
-  "productName": "Sync Forge",
-  "version": "1.0.0",
-  "description": "File Syncing Application",
+  "productName": "Labric Sync",
+  "version": "0.0.1",
+  "description": "Lab Instrument File Syncing Application",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -14,7 +14,7 @@
   "keywords": [],
   "author": {
     "name": "Connor",
-    "email": "co.hogan12@gmail.com"
+    "email": "connor@labric.co"
   },
   "license": "MIT",
   "devDependencies": {
