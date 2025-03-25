@@ -34,6 +34,7 @@ const createWindow = () => {
       nodeIntegration: false,
       contextIsolation: true,
     },
+    icon: path.join(__dirname, './assets/icons/icon.png'),
   });
 
   // Setup Content Security Policy (CSP)

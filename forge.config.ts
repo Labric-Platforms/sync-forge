@@ -11,13 +11,18 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     executableName: "labric-sync-new",
+    icon: "./src/assets/icons/icon",
   },
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({}),
     new MakerZIP({}, ["darwin"]),
     new MakerRpm({}),
-    new MakerDeb({}),
+    new MakerDeb({
+      options: {
+        icon: "./src/assets/icons/icon",
+      }
+    }),
   ],
   plugins: [
     new VitePlugin({
