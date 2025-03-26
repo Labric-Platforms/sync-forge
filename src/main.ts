@@ -2,6 +2,10 @@ import { app, BrowserWindow } from 'electron';
 import { updateElectronApp } from 'update-electron-app';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+import { v4 as uuidv4 } from 'uuid';
+import { machineIdSync } from 'node-machine-id';
+import crypto from 'crypto';
+import fs from 'fs';
 
 updateElectronApp();
 
@@ -23,6 +27,25 @@ import os from 'os';
 let watcher: FSWatcher | null = null;
 let watchedDirectory: string | null = null;
 
+// Device ID functions
+function getDeviceId(): string {
+  const userDataPath = app.getPath('userData');
+  const idFilePath = path.join(userDataPath, 'device_id.txt');
+
+  if (fs.existsSync(idFilePath)) {
+    return fs.readFileSync(idFilePath, 'utf8');
+  } else {
+    const newId = uuidv4();
+    fs.writeFileSync(idFilePath, newId);
+    return newId;
+  }
+}
+
+function getDeviceFingerprint(): string {
+  const machineId = machineIdSync(true);
+  return crypto.createHash('sha256').update(machineId).digest('hex');
+}
+
 // Declare globals provided by your build/environment
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
@@ -40,12 +63,41 @@ const createWindow = () => {
     icon: path.join(__dirname, './assets/icons/icon.png'),
   });
 
-  // Setup Content Security Policy (CSP)
+  // Setup Content Security Policy (CSP) and CORS handling
   const isDev = process.env.NODE_ENV === 'development';
+  
+  // Handle CORS preflight requests
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+    { urls: ['http://localhost:3000/*'] },
+    (details, callback) => {
+      callback({
+        requestHeaders: {
+          ...details.requestHeaders,
+          'Origin': 'app://.',
+        }
+      });
+    }
+  );
+
+  mainWindow.webContents.session.webRequest.onHeadersReceived(
+    { urls: ['http://localhost:3000/*'] },
+    (details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          'access-control-allow-origin': ['app://.'],
+          'access-control-allow-methods': ['GET, POST, OPTIONS'],
+          'access-control-allow-headers': ['Content-Type'],
+        }
+      });
+    }
+  );
+
+  // Setup CSP
   mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
     const csp = isDev
-      ? "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' ws://localhost:*"
-      : "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:";
+      ? "default-src 'self' http://localhost:3000; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://localhost:3000"
+      : "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://localhost:3000";
     callback({
       responseHeaders: {
         ...details.responseHeaders,
@@ -67,15 +119,19 @@ const createWindow = () => {
 
   // IPC handler: Provide device info
   ipcMain.handle('device:getInfo', () => {
-    return {
+    const deviceInfo = {
       hostname: os.hostname(),
       platform: os.platform(),
       release: os.release(),
       arch: os.arch(),
       cpus: os.cpus().length,
       totalMemory: Math.round(os.totalmem() / (1024 * 1024 * 1024)), // in GB
-      type: os.type()
-    };
+      type: os.type(),
+      deviceId: getDeviceId(),
+      deviceFingerprint: getDeviceFingerprint()
+    }
+    console.log('Device info', deviceInfo);
+    return deviceInfo;
   });
 
   // IPC handler: Open directory dialog and start filesystem watcher

@@ -7,6 +7,8 @@ export interface IpcApi {
     cpus: number;
     totalMemory: number;
     type: string;
+    deviceId: string;
+    deviceFingerprint: string;
   }>;
   openDirectory: () => Promise<string | null>;
   stopWatching: () => Promise<void>;
