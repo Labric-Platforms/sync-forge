@@ -125,10 +125,10 @@ const createWindow = () => {
       release: os.release(),
       arch: os.arch(),
       cpus: os.cpus().length,
-      totalMemory: Math.round(os.totalmem() / (1024 * 1024 * 1024)), // in GB
+      total_memory: Math.round(os.totalmem() / (1024 * 1024 * 1024)), // in GB
       type: os.type(),
-      deviceId: getDeviceId(),
-      deviceFingerprint: getDeviceFingerprint()
+      device_id: getDeviceId(),
+      device_fingerprint: getDeviceFingerprint()
     }
     console.log('Device info', deviceInfo);
     return deviceInfo;

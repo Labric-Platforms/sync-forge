@@ -3,6 +3,7 @@ import Dashboard from "@/pages/Dashboard"
 import Login from "@/pages/Login"
 import FileDetails from "@/pages/FileDetails"
 import ProtectedRoute from "@/components/ProtectedRoute"
+import { Toaster } from "sonner"
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
           } />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <Toaster />
       </BrowserRouter>
     )
   }
