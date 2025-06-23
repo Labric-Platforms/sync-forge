@@ -6,5 +6,6 @@ export interface DeviceInfo {
   cpus: number;
   total_memory: number;
   type: string;
+  device_id: string;
   device_fingerprint: string;
 } 
