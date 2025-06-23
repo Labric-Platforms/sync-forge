@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'node:path';
 import os from 'os';
-import { DeviceInfo } from '../../types/device';
+import { DeviceInfo } from '@/types/device';
 
 export function getDeviceId(): string {
   const userDataPath = app.getPath('userData');

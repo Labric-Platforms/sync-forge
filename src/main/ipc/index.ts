@@ -1,6 +1,6 @@
 import { ipcMain, dialog, BrowserWindow } from 'electron';
-import { getDeviceInfo } from '../services/deviceService';
-import { FileWatcherService } from '../services/fileWatcher';
+import { getDeviceInfo } from '@/main/services/deviceService';
+import { FileWatcherService } from '@/main/services/fileWatcher';
 
 export function setupIpcHandlers(mainWindow: BrowserWindow): FileWatcherService {
   const fileWatcherService = new FileWatcherService(mainWindow);
