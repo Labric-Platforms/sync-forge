@@ -1,7 +1,7 @@
 {
   "name": "labric-sync-new",
   "productName": "Labric Sync",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Lab Instrument File Syncing Application",
   "main": ".vite/build/main.js",
   "repository": {
