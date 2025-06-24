@@ -12,6 +12,9 @@ contextBridge.exposeInMainWorld(
     stopWatching: () => ipcRenderer.invoke('watcher:stop'),
     onFileChange: (callback: (event: { type: string; path: string }) => void) => {
       ipcRenderer.on('file:change', (_, event) => callback(event));
+    },
+    onUploadProgress: (callback: (progress: any) => void) => {
+      ipcRenderer.on('upload:progress', (_, progress) => callback(progress));
     }
   }
 );
