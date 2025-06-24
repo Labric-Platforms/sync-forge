@@ -2,10 +2,11 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { FolderOpen, FileText, Trash2, Plus, RefreshCw, Laptop, Wifi, WifiOff } from "lucide-react"
+import { FolderOpen, FileText, Trash2, Plus, RefreshCw, Laptop } from "lucide-react"
 import { DeviceInfo } from "@/types/device"
 import { SyncStatus } from "@/components/SyncStatus"
 import { UploadProgressList } from "@/components/UploadProgressList"
+import { OnlineStatus } from "@/components/OnlineStatus"
 
 type FileChange = {
   type: 'add' | 'change' | 'delete'
@@ -18,16 +19,9 @@ export default function Dashboard() {
   const [directory, setDirectory] = useState<string | null>(null)
   const [fileChanges, setFileChanges] = useState<FileChange[]>([])
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo | null>(null)
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
 
   useEffect(() => {
     window.api.getDeviceInfo().then(setDeviceInfo)
-
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
-
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
 
     if (directory) {
       window.api.onFileChange((data: { type: 'add' | 'change' | 'delete'; path: string }) => {
@@ -39,14 +33,7 @@ export default function Dashboard() {
 
       return () => {
         window.api.stopWatching()
-        window.removeEventListener('online', handleOnline)
-        window.removeEventListener('offline', handleOffline)
       }
-    }
-
-    return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
     }
   }, [directory])
 
@@ -137,18 +124,9 @@ export default function Dashboard() {
           )}
           <SyncStatus />
         </div>
-        <div className="flex items-center gap-1 ml-auto">
-          {isOnline ? (
-            <>
-              <Wifi className="w-3 h-3 text-green-500" />
-              <span className="text-green-500">Online</span>
-            </>
-          ) : (
-            <>
-              <WifiOff className="w-3 h-3 text-red-500" />
-              <span className="text-red-500">Offline</span>
-            </>
-          )}
+
+        <div className="flex ml-auto">
+          <OnlineStatus />
         </div>
       </div>
     </div>
